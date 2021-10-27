@@ -15,20 +15,19 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[node name="Ghost" type="RigidBody2D"]
-position = Vector2( 2.38522, -2.80617 )
-gravity_scale = 0.0
+[node name="Ghost" type="KinematicBody2D"]
+position = Vector2( 69.6685, 34.9742 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 287.21, 181.278 )
+position = Vector2( 3.14146, 3.6855 )
 rotation = 0.785398
 shape = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-position = Vector2( 284.737, 179.526 )
+position = Vector2( 0.715515, 2.06653 )
 frames = SubResource( 2 )
 animation = "idle"

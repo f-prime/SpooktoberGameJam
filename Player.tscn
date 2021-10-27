@@ -14,8 +14,8 @@ animations = [ {
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 14.1471, 23.4049 )
 
-[node name="Player" type="RigidBody2D"]
-position = Vector2( 151.979, 163.717 )
+[node name="Player" type="KinematicBody2D"]
+position = Vector2( 74.211, 40.0819 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_group_": true
