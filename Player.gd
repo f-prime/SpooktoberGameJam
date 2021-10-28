@@ -3,17 +3,27 @@ extends KinematicBody2D
 signal show_ghost
 
 export var acceleration = 5
-export var max_speed = 300
+export var max_speed = 200
 export var friction = 10
-export var gravitational_acceleration = 500
-export var jump_velocity = 200
+export var gravitational_acceleration = 580
+export var jump_velocity = 250
 
 var on_ground = false
 var velocity = Vector2()
+var frame_swap_occurred = 0
 
 func _ready():
   pass # Replace with function body.
-  
+
+func current_frame():
+  return get_tree().get_frame()
+
+func show_ghost():
+  if not on_ground:
+    return
+  emit_signal("show_ghost", position, current_frame())
+  hide()
+
 func process_input(delta):
   move_and_collide(Vector2(velocity.x * delta, 0))
   
@@ -23,9 +33,8 @@ func process_input(delta):
   elif Input.is_key_pressed(KEY_A):
     velocity.x = round(lerp(velocity.x, -max_speed, acceleration * delta))
     $AnimatedSprite.flip_h = true
-  elif Input.is_key_pressed(KEY_S):
-    emit_signal("show_ghost", position)
-    hide()
+  elif Input.is_action_just_pressed("sacrifice") and current_frame() != frame_swap_occurred:
+    show_ghost()
   else:
     velocity.x = lerp(velocity.x, 0, friction * delta)
     
@@ -44,10 +53,13 @@ func gravity(delta):
   else:
     velocity.y += ga
 
-
 func _process(delta):
   if not is_visible():
     return
   gravity(delta)
   process_input(delta)
 
+func _on_Ghost_show_player(ghost_position, frame_occurred):
+  frame_swap_occurred = frame_occurred
+  position = Vector2(ghost_position.x, ghost_position.y)
+  show()
