@@ -40,7 +40,13 @@ func process_input(delta):
     
   if Input.is_action_just_pressed("jump") and on_ground:
     velocity.y -= jump_velocity
-    
+  
+  if abs(velocity.x) > 1:
+    $AnimatedSprite.animation = "walking"
+    $AnimatedSprite.play()
+  else:
+    $AnimatedSprite.animation = "idle"
+    $AnimatedSprite.stop()  
   
 func gravity(delta):
   var movement = Vector2(0, velocity.y * delta)
