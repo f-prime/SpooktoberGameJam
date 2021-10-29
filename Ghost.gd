@@ -19,9 +19,24 @@ func current_frame():
 func toggle_collisions():
   $CollisionShape2D.disabled = not $CollisionShape2D.disabled
 
+func close_tombstone():
+  var all_nodes = get_tree().get_root().get_children()[0].get_children()
+  for node in all_nodes:
+    if not node.is_visible():
+      continue
+    if not ("Tombstone" in node.name):
+      continue
+    var distance_to_tombstone = position.distance_to(node.position)
+    if distance_to_tombstone < 100:
+      return node
+  return null
+
 func show_player():
+  var tombstone = close_tombstone()
+  if not tombstone:
+    return
   toggle_collisions()
-  emit_signal("show_player", position, current_frame())
+  emit_signal("show_player", position, current_frame(), tombstone)
   hide()
 
 func process_input(delta):

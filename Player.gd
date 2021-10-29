@@ -13,7 +13,7 @@ var velocity = Vector2()
 var frame_swap_occurred = 0
 
 func _ready():
-  pass # Replace with function body.
+  pass
 
 func current_frame():
   return get_tree().get_frame()
@@ -21,9 +21,9 @@ func current_frame():
 func show_ghost():
   if not on_ground:
     return
-  emit_signal("show_ghost", position, current_frame())
   hide()
-
+  emit_signal("show_ghost", position, current_frame())
+  
 func process_input(delta):
   move_and_collide(Vector2(velocity.x * delta, 0))
   
@@ -65,7 +65,10 @@ func _process(delta):
   gravity(delta)
   process_input(delta)
 
-func _on_Ghost_show_player(ghost_position, frame_occurred):
+func _on_Ghost_show_player(ghost_position, frame_occurred, tomb_stone_instance):
+  show()
+  tomb_stone_instance.hide()
+  tomb_stone_instance.toggle_collisions(false)
   frame_swap_occurred = frame_occurred
   position = Vector2(ghost_position.x, ghost_position.y)
-  show()
+
