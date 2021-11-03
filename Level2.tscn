@@ -20,6 +20,7 @@ position = Vector2( 152.29, 453.276 )
 
 [node name="Player" parent="." instance=ExtResource( 5 )]
 position = Vector2( 153.906, 518.251 )
+Ghost = ExtResource( 4 )
 
 [node name="Portal" parent="." instance=ExtResource( 2 )]
 position = Vector2( 926.907, 497.903 )

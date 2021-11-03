@@ -1,7 +1,5 @@
 extends KinematicBody2D
 
-signal show_ghost
-
 export var acceleration = 5
 export var max_speed = 200
 export var friction = 10
@@ -10,19 +8,14 @@ export var jump_velocity = 250
 
 var on_ground = false
 var velocity = Vector2()
-var frame_swap_occurred = 0
-
-func _ready():
-  pass
-
-func current_frame():
-  return get_tree().get_frame()
 
 func show_ghost():
-  if not on_ground:
-    return
-  hide()
-  emit_signal("show_ghost", position, current_frame())
+  var ghost: KinematicBody2D = load("res://Ghost.tscn").instance()
+  ghost.position = position
+  ghost.position.y -= 50
+  get_parent().add_child(ghost)
+  get_parent().remove_child(self)
+
   
 func process_input(delta):
   move_and_collide(Vector2(velocity.x * delta, 0))
@@ -33,8 +26,6 @@ func process_input(delta):
   elif Input.is_key_pressed(KEY_A):
     velocity.x = round(lerp(velocity.x, -max_speed, acceleration * delta))
     $AnimatedSprite.flip_h = true
-  elif Input.is_action_just_pressed("sacrifice") and current_frame() != frame_swap_occurred:
-    show_ghost()
   else:
     velocity.x = lerp(velocity.x, 0, friction * delta)
     
@@ -65,10 +56,7 @@ func _process(delta):
   gravity(delta)
   process_input(delta)
 
-func _on_Ghost_show_player(ghost_position, frame_occurred, tomb_stone_instance):
-  show()
-  tomb_stone_instance.hide()
-  tomb_stone_instance.toggle_collisions(false)
-  frame_swap_occurred = frame_occurred
-  position = Vector2(ghost_position.x, ghost_position.y)
 
+func _on_Fire_body_entered(body):
+  if body.name == "Player":
+    show_ghost()
