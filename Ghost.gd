@@ -6,6 +6,8 @@ export var friction = 5
 
 var velocity = Vector2()
   
+signal show_player
+  
 func close_tombstone():
   var all_nodes = get_tree().get_root().get_children()[0].get_children()
   for node in all_nodes:
@@ -22,12 +24,8 @@ func show_player():
   var tombstone = close_tombstone()
   if not tombstone:
     return
-  var parent = get_parent()
-  var player: KinematicBody2D = load("res://Player.tscn").instance()
-  player.position = position
-  parent.add_child(player)
-  parent.remove_child(self)
-  parent.remove_child(tombstone)
+  
+  emit_signal("show_player", self, tombstone)
 
 func process_input(delta):
   if Input.is_key_pressed(KEY_W):

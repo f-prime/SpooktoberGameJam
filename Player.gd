@@ -9,13 +9,10 @@ export var jump_velocity = 250
 var on_ground = false
 var velocity = Vector2()
 
-func show_ghost():
-  var ghost: KinematicBody2D = load("res://Ghost.tscn").instance()
-  ghost.position = position
-  ghost.position.y -= 50
-  get_parent().add_child(ghost)
-  get_parent().remove_child(self)
+signal show_ghost
 
+func show_ghost():
+  emit_signal("show_ghost", self)
   
 func process_input(delta):
   move_and_collide(Vector2(velocity.x * delta, 0))
@@ -55,7 +52,6 @@ func _process(delta):
     return
   gravity(delta)
   process_input(delta)
-
 
 func _on_Fire_body_entered(body):
   if body.name == "Player":
